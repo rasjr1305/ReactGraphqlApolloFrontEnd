@@ -11,6 +11,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import { visuallyHidden } from "@mui/utils";
+import { Button } from "react-bootstrap";
 
 export interface Data {
   id: number;
@@ -84,6 +85,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: "Categoria",
   },
+  {
+    id: "price",
+    numeric: false,
+    disablePadding: false,
+    label: "Opções",
+  },
 ];
 
 interface EnhancedTableProps {
@@ -128,7 +135,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
-            key={headCell.id}
+            key={`${headCell.id}_${headCell.numeric}`}
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -271,6 +278,44 @@ export default function EnhancedTable({ rows }: PropData) {
                       </TableCell>
                       <TableCell align="right">{`R$ ${row.price}`}</TableCell>
                       <TableCell align="left">{row.category}</TableCell>
+                      <TableCell align="center">
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                          }}
+                        >
+                          <Button
+                            variant="primary"
+                            type="button"
+                            onClick={() => {
+                              window.location.href = `/${row.id}`;
+                            }}
+                          >
+                            Visualizar
+                          </Button>
+                          <div style={{ paddingLeft: 30, paddingRight: 30 }}>
+                            <Button
+                              variant="primary"
+                              type="button"
+                              onClick={() => {
+                                window.location.href = `/edit/${row.id}`;
+                              }}
+                            >
+                              Editar
+                            </Button>
+                          </div>
+                          <Button
+                            variant="primary"
+                            type="button"
+                            onClick={() => {
+                              window.location.href = `/delete/${row.id}`;
+                            }}
+                          >
+                            Deletar
+                          </Button>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
